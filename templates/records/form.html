@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% block title %}{{ heading }}{% endblock %}
+{% block content %}
+<div class="breadcrumb"><a href="{% url back_url %}">Back</a><span>/</span><span>{{ heading }}</span></div>
+<section class="form-panel panel">
+  <div class="panel-heading"><div><span class="eyebrow">RECORD MANAGEMENT</span><h1>{{ heading }}</h1><p>Fields marked with an asterisk are required.</p></div></div>
+  <form method="post" class="record-form">{% csrf_token %}
+    {% if form.non_field_errors %}<div class="message error">{{ form.non_field_errors }}</div>{% endif %}
+    <div class="form-grid">{% for field in form %}
+      <div class="form-field {% if field.field.widget.input_type == 'checkbox' %}checkbox-field{% endif %}">
+        {% if field.field.widget.input_type == 'checkbox' %}<label class="checkbox-label">{{ field }} <span>{{ field.label }}</span></label>{% else %}<label for="{{ field.id_for_label }}">{{ field.label }}{% if field.field.required %}<span class="required">*</span>{% endif %}</label>{{ field }}{% endif %}
+        {% if field.help_text %}<small class="help-text">{{ field.help_text }}</small>{% endif %}{% for error in field.errors %}<small class="field-error">{{ error }}</small>{% endfor %}
+      </div>
+    {% endfor %}</div>
+    <div class="form-actions"><a class="button button-secondary" href="{% url back_url %}">Cancel</a><button class="button button-primary" type="submit">Save record</button></div>
+  </form>
+</section>
+{% endblock %}

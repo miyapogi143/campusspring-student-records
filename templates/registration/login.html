@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% block title %}Sign in{% endblock %}
+{% block content %}
+<section class="login-layout">
+  <div class="login-art">
+    <div class="brand brand-light"><span class="brand-mark">C</span><span><strong>Campus</strong><small>SPRING</small></span></div>
+    <div class="login-message">
+      <span class="eyebrow">A FRESH START FOR EVERY LEARNER</span>
+      <h1>Make room for<br>every next step.</h1>
+      <p>A bright, welcoming workspace for student profiles, course progress, and academic milestones.</p>
+    </div>
+    <div class="art-footer">STUDENT RECORD MANAGEMENT · 2026</div>
+    <div class="art-orb orb-one"></div><div class="art-orb orb-two"></div>
+  </div>
+  <div class="login-panel">
+    <div class="login-card">
+      <span class="eyebrow">STAFF PORTAL</span>
+      <h2>Welcome back</h2>
+      <p class="muted">Sign in with your staff account to continue.</p>
+      {% if form.errors %}<div class="message error">The username or password was incorrect. Please try again.</div>{% endif %}
+      <form method="post" class="stack-form">{% csrf_token %}
+        <input type="hidden" name="next" value="{{ next }}">
+        <label for="{{ form.username.id_for_label }}">Username</label>
+        {{ form.username }}
+        <label for="{{ form.password.id_for_label }}">Password</label>
+        {{ form.password }}
+        <button class="button button-primary button-wide" type="submit">Sign in <span>→</span></button>
+      </form>
+      <p class="login-note">Access is limited to authorized academic staff.</p>
+    </div>
+  </div>
+</section>
+{% endblock %}

@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+{% block title %}Enrollments & grades{% endblock %}
+{% block content %}
+<section class="page-heading"><div><span class="eyebrow">REGISTRATION &amp; ASSESSMENT</span><h1>Enrollments &amp; grades</h1><p>Track course registrations and term grades.</p></div><a class="button button-primary" href="{% url 'enrollment_create' %}">＋ New enrollment</a></section>
+<section class="panel">
+  <form method="get" class="search-bar"><span>⌕</span><input type="search" name="q" value="{{ q }}" placeholder="Search by student or course"><button class="button button-secondary" type="submit">Search</button>{% if q %}<a class="text-link" href="{% url 'enrollment_list' %}">Clear</a>{% endif %}</form>
+  {% if enrollments %}<div class="table-wrap"><table><thead><tr><th>Student</th><th>Course</th><th>School year / term</th><th>Prelim</th><th>Midterm</th><th>Final</th><th>Average</th><th></th></tr></thead><tbody>
+  {% for item in enrollments %}<tr><td><strong>{{ item.student.full_name }}</strong><small class="table-sub">{{ item.student.student_number }}</small></td><td><strong>{{ item.course.code }}</strong><small class="table-sub">{{ item.course.title }}</small></td><td>{{ item.school_year }}<small class="table-sub">{{ item.semester }}</small></td><td>{{ item.prelim_grade|default:"—" }}</td><td>{{ item.midterm_grade|default:"—" }}</td><td>{{ item.final_grade|default:"—" }}</td><td><strong>{% if item.average is not None %}{{ item.average }}{% else %}—{% endif %}</strong></td><td class="action-cell"><a class="row-action" href="{% url 'enrollment_edit' item.pk %}">Edit</a><a class="row-action danger-link" href="{% url 'enrollment_delete' item.pk %}">Remove</a></td></tr>{% endfor %}
+  </tbody></table></div>{% else %}<div class="empty-state">{% if q %}No enrollments match “{{ q }}”.{% else %}No enrollment records yet. Create one to start tracking grades.{% endif %}</div>{% endif %}
+</section>
+{% endblock %}

@@ -1,0 +1,47 @@
+{% load static %}
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block title %}CampusSpring{% endblock %} · CampusSpring</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<body>
+  {% if user.is_authenticated %}
+  <aside class="sidebar">
+    <a class="brand" href="{% url 'dashboard' %}">
+      <span class="brand-mark">C</span>
+      <span><strong>Campus</strong><small>SPRING</small></span>
+    </a>
+    <div class="nav-caption">WORKSPACE</div>
+    <nav class="main-nav" aria-label="Main navigation">
+      <a href="{% url 'dashboard' %}" class="{% if request.resolver_match.url_name == 'dashboard' %}active{% endif %}"><span>◫</span> Overview</a>
+      <a href="{% url 'student_list' %}" class="{% if 'student' in request.resolver_match.url_name %}active{% endif %}"><span>♙</span> Students</a>
+      <a href="{% url 'course_list' %}" class="{% if 'course' in request.resolver_match.url_name %}active{% endif %}"><span>▤</span> Courses</a>
+      <a href="{% url 'enrollment_list' %}" class="{% if 'enrollment' in request.resolver_match.url_name %}active{% endif %}"><span>▧</span> Enrollments &amp; grades</a>
+    </nav>
+    <div class="sidebar-bottom">
+      <div class="profile-avatar">{{ user.username|first|upper }}</div>
+      <div class="profile-name"><strong>{{ user.get_full_name|default:user.username }}</strong><small>Staff account</small></div>
+      <form method="post" action="{% url 'logout' %}">{% csrf_token %}<button class="logout-button" type="submit" aria-label="Sign out">↗</button></form>
+    </div>
+  </aside>
+  {% endif %}
+  <main class="{% if user.is_authenticated %}main-content{% else %}auth-content{% endif %}">
+    {% if user.is_authenticated %}
+    <header class="topbar">
+      <div><span class="eyebrow">CAMPUS COMMUNITY</span><strong>Progress starts with a clear picture.</strong></div>
+      <div class="topbar-date">{% now "D, M j" %}</div>
+    </header>
+    {% endif %}
+    {% if messages %}
+      <div class="messages">{% for message in messages %}<div class="message {{ message.tags }}">{{ message }}</div>{% endfor %}</div>
+    {% endif %}
+    {% block content %}{% endblock %}
+  </main>
+</body>
+</html>

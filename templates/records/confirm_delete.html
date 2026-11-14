@@ -1,0 +1,9 @@
+{% extends "base.html" %}
+{% block title %}Confirm removal{% endblock %}
+{% block content %}
+<section class="confirm-card panel">
+  <span class="confirm-icon">!</span><span class="eyebrow">PLEASE CONFIRM</span><h1>Remove this record?</h1>
+  <p>{% if has_enrollments %}This course is in use, so continuing will deactivate it rather than delete its history.{% else %}You’re about to remove <strong>{{ object }}</strong>. This action cannot be undone.{% endif %}</p>
+  <form method="post" action="{% url delete_url object.pk %}" class="form-actions">{% csrf_token %}<a class="button button-secondary" href="{% url back_url %}">Keep record</a><button class="button button-danger" type="submit">{% if has_enrollments %}Deactivate course{% else %}Remove record{% endif %}</button></form>
+</section>
+{% endblock %}

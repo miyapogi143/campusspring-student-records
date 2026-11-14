@@ -1,0 +1,16 @@
+services:
+  - type: web
+    name: campusspring-records
+    runtime: python
+    buildCommand: "bash build.sh"
+    startCommand: "gunicorn config.wsgi:application"
+    autoDeploy: true
+    healthCheckPath: /accounts/login/
+    plan: free
+    envVars:
+      - key: SECRET_KEY
+        generateValue: true
+      - key: DEBUG
+        value: "False"
+      - key: ALLOWED_HOSTS
+        value: ".onrender.com"
